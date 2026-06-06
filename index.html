@@ -392,13 +392,15 @@
     var c = state.costs.find(function(x){return x.id===id;});
     if(!c) return;
     editingCostId = id;
+    // Render first — it rebuilds the Product <select>, which would otherwise
+    // discard a value set beforehand. Populate fields afterwards.
+    render();
     $("c-svc").value = c.service || "";
-    $("c-amt").value = c.monthly;
+    $("c-amt").value = (c.monthly != null) ? c.monthly : "";
     $("c-cur").value = c.currency || state.currency;
     $("c-cat").value = c.category || "other";
     $("c-prod").value = c.productId;
     $("c-url").value = c.url || "";
-    render();
     $("cost-panel").scrollIntoView({behavior:"smooth", block:"center"});
     $("c-svc").focus();
   }
