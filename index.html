@@ -61,9 +61,21 @@
   body{
     min-height:100vh;
     background:
+      /* upper subtle heat haze (the original glow) */
       radial-gradient(120% 80% at 50% -10%, var(--glow), transparent 60%),
+      /* bottom fire floor — the burn is anchored at the bottom */
+      radial-gradient(150% 80% at 50% 110%, rgba(255,122,47,.22), rgba(201,73,26,.10) 35%, transparent 75%),
+      /* a hint of warm tint across the whole canvas */
+      radial-gradient(80% 100% at 50% 100%, rgba(201,73,26,.06), transparent 60%),
       var(--bg);
     -webkit-font-smoothing:antialiased;
+  }
+  :root[data-theme="light"] body{
+    background:
+      radial-gradient(120% 80% at 50% -10%, var(--glow), transparent 60%),
+      radial-gradient(150% 80% at 50% 110%, rgba(184,67,15,.26), rgba(221,90,28,.12) 35%, transparent 75%),
+      radial-gradient(80% 100% at 50% 100%, rgba(184,67,15,.10), transparent 60%),
+      var(--bg);
   }
   .wrap{max-width:880px;margin:0 auto;padding:28px 20px 64px}
 
@@ -176,12 +188,240 @@
   .reset:hover{color:var(--danger);border-color:var(--danger)}
 
   @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ===== Ambient "burn" layer ===== */
+  /* Floating gradient orbs in the background */
+  .bg-orbs{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .bg-orb{position:absolute;border-radius:50%;filter:blur(70px);will-change:transform,opacity;mix-blend-mode:screen}
+  :root[data-theme="light"] .bg-orb{mix-blend-mode:multiply}
+  .bg-orb-1{width:65vw;height:65vw;max-width:680px;max-height:680px;top:-14%;left:-12%;
+    background:radial-gradient(circle,rgba(255,122,47,.65),transparent 65%);
+    animation:drift1 14s ease-in-out infinite}
+  .bg-orb-2{width:55vw;height:55vw;max-width:580px;max-height:580px;top:38%;right:-16%;
+    background:radial-gradient(circle,rgba(201,73,26,.55),transparent 65%);
+    animation:drift2 17s ease-in-out infinite}
+  .bg-orb-3{width:40vw;height:40vw;max-width:440px;max-height:440px;top:8%;left:38%;
+    background:radial-gradient(circle,rgba(255,154,92,.50),transparent 65%);
+    animation:drift3 12s ease-in-out infinite}
+  /* The "fire floor" — a wide orange glow pinned to the bottom of the viewport */
+  .bg-orb-4{width:140vw;height:60vh;bottom:-30vh;left:-20vw;border-radius:50%;
+    background:radial-gradient(ellipse at center,rgba(255,122,47,.55),rgba(201,73,26,.25) 40%,transparent 70%);
+    animation:floor-wave 9s ease-in-out infinite;filter:blur(50px)}
+  :root[data-theme="light"] .bg-orb-1{background:radial-gradient(circle,rgba(184,67,15,.50),transparent 65%)}
+  :root[data-theme="light"] .bg-orb-2{background:radial-gradient(circle,rgba(221,90,28,.45),transparent 65%)}
+  :root[data-theme="light"] .bg-orb-3{background:radial-gradient(circle,rgba(255,122,47,.38),transparent 65%)}
+  :root[data-theme="light"] .bg-orb-4{background:radial-gradient(ellipse at center,rgba(184,67,15,.50),rgba(221,90,28,.22) 40%,transparent 70%)}
+  @keyframes drift1{
+    0%,100%{transform:translate(0,0) scale(1);opacity:.85}
+    25%{transform:translate(140px,80px) scale(1.15);opacity:1}
+    50%{transform:translate(80px,160px) scale(.95);opacity:.75}
+    75%{transform:translate(-40px,60px) scale(1.1);opacity:.95}
+  }
+  @keyframes drift2{
+    0%,100%{transform:translate(0,0) scale(1);opacity:.8}
+    33%{transform:translate(-100px,70px) scale(1.12);opacity:1}
+    66%{transform:translate(-160px,-50px) scale(.92);opacity:.7}
+  }
+  @keyframes drift3{
+    0%,100%{transform:translate(0,0) scale(1);opacity:.7}
+    50%{transform:translate(90px,-110px) scale(1.18);opacity:1}
+  }
+  @keyframes floor-wave{
+    0%,100%{transform:translateX(0) scaleY(1) scaleX(1);opacity:.9}
+    33%{transform:translateX(60px) scaleY(1.15) scaleX(.95);opacity:1}
+    66%{transform:translateX(-40px) scaleY(.92) scaleX(1.05);opacity:.8}
+  }
+
+  /* Two tall flame pillars rising from the bottom edge */
+  .bg-orb-5{width:28vw;height:85vh;max-width:340px;bottom:-22vh;left:14%;border-radius:50%;
+    background:radial-gradient(ellipse at center,rgba(255,122,47,.55),rgba(201,73,26,.20) 40%,transparent 70%);
+    animation:flame-pillar-1 6.5s ease-in-out infinite;filter:blur(55px)}
+  .bg-orb-6{width:24vw;height:78vh;max-width:300px;bottom:-26vh;right:18%;border-radius:50%;
+    background:radial-gradient(ellipse at center,rgba(255,154,92,.48),rgba(255,122,47,.18) 40%,transparent 70%);
+    animation:flame-pillar-2 8.2s ease-in-out infinite;filter:blur(55px)}
+  :root[data-theme="light"] .bg-orb-5{background:radial-gradient(ellipse at center,rgba(184,67,15,.50),rgba(221,90,28,.22) 40%,transparent 70%)}
+  :root[data-theme="light"] .bg-orb-6{background:radial-gradient(ellipse at center,rgba(221,90,28,.44),rgba(184,67,15,.18) 40%,transparent 70%)}
+  @keyframes flame-pillar-1{
+    0%,100%{transform:translateY(0) scaleY(1) scaleX(1);opacity:.9}
+    25%{transform:translateY(-30px) scaleY(1.14) scaleX(.92);opacity:1}
+    50%{transform:translateY(-10px) scaleY(.95) scaleX(1.08);opacity:.85}
+    75%{transform:translateY(-22px) scaleY(1.08) scaleX(.96);opacity:.95}
+  }
+  @keyframes flame-pillar-2{
+    0%,100%{transform:translateY(0) scaleY(1) scaleX(1);opacity:.85}
+    33%{transform:translateY(-26px) scaleY(1.12) scaleX(.9);opacity:1}
+    66%{transform:translateY(-14px) scaleY(.92) scaleX(1.1);opacity:.78}
+  }
+
+  /* Heat-haze layer — two soft flickering bands at the bottom */
+  .heat-haze{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .heat-haze::before,.heat-haze::after{content:"";position:absolute;left:-10%;right:-10%;filter:blur(40px);mix-blend-mode:screen}
+  .heat-haze::before{bottom:-8%;height:55%;
+    background:
+      radial-gradient(ellipse 55% 50% at 25% 100%,rgba(255,122,47,.36),transparent 70%),
+      radial-gradient(ellipse 50% 45% at 75% 100%,rgba(201,73,26,.30),transparent 70%);
+    animation:haze1 7s ease-in-out infinite}
+  .heat-haze::after{bottom:0;height:35%;
+    background:radial-gradient(ellipse 55% 55% at 50% 100%,rgba(255,154,92,.32),transparent 70%);
+    animation:haze2 5.5s ease-in-out infinite alternate}
+  :root[data-theme="light"] .heat-haze::before,
+  :root[data-theme="light"] .heat-haze::after{mix-blend-mode:multiply}
+  :root[data-theme="light"] .heat-haze::before{
+    background:
+      radial-gradient(ellipse 55% 50% at 25% 100%,rgba(184,67,15,.32),transparent 70%),
+      radial-gradient(ellipse 50% 45% at 75% 100%,rgba(221,90,28,.28),transparent 70%)}
+  :root[data-theme="light"] .heat-haze::after{
+    background:radial-gradient(ellipse 55% 55% at 50% 100%,rgba(255,122,47,.30),transparent 70%)}
+  @keyframes haze1{
+    0%,100%{transform:translate(0,0) scaleY(1)}
+    50%{transform:translate(25px,-18px) scaleY(1.12)}
+  }
+  @keyframes haze2{
+    0%{transform:translate(0,0) scaleX(1)}
+    100%{transform:translate(-20px,-12px) scaleX(1.08)}
+  }
+
+  /* Rising embers — 30 sparks, sizes 1-6px, mixed colors for a "burning" feel */
+  .sparks{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .spark{position:absolute;bottom:-20px;width:3px;height:3px;border-radius:50%;
+    background:var(--ember);box-shadow:0 0 10px var(--ember-soft);
+    opacity:0;animation:ember-rise 7s linear infinite;mix-blend-mode:screen}
+  /* Each spark: left% + size + delay + duration + (optional) color override */
+  .spark:nth-child(1) {left:3%;  width:2px;height:2px;animation-delay:0s;   animation-duration:6s}
+  .spark:nth-child(2) {left:7%;  width:1px;height:1px;animation-delay:1.2s; animation-duration:8s;background:var(--ember-deep);box-shadow:0 0 6px var(--ember-deep)}
+  .spark:nth-child(3) {left:11%; width:4px;height:4px;animation-delay:2.8s; animation-duration:5s;background:var(--ember-soft);box-shadow:0 0 14px var(--ember-soft)}
+  .spark:nth-child(4) {left:14%; width:3px;height:3px;animation-delay:4s;   animation-duration:7s}
+  .spark:nth-child(5) {left:18%; width:1px;height:1px;animation-delay:.5s;  animation-duration:9s;background:var(--ember-deep)}
+  .spark:nth-child(6) {left:22%; width:5px;height:5px;animation-delay:3s;   animation-duration:6s;background:#fff1d6;box-shadow:0 0 20px #ffb86a}
+  .spark:nth-child(7) {left:26%; width:2px;height:2px;animation-delay:5.5s; animation-duration:7s;background:var(--ember-deep);box-shadow:0 0 6px var(--ember-deep)}
+  .spark:nth-child(8) {left:30%; width:3px;height:3px;animation-delay:1.8s; animation-duration:5s}
+  .spark:nth-child(9) {left:34%; width:2px;height:2px;animation-delay:6.2s; animation-duration:8s;background:var(--ember-soft);box-shadow:0 0 10px var(--ember-soft)}
+  .spark:nth-child(10){left:38%; width:1px;height:1px;animation-delay:2.2s; animation-duration:6s;background:var(--ember-deep)}
+  .spark:nth-child(11){left:42%; width:4px;height:4px;animation-delay:4.7s; animation-duration:7s;box-shadow:0 0 16px var(--ember-soft)}
+  .spark:nth-child(12){left:46%; width:2px;height:2px;animation-delay:.8s;  animation-duration:5s}
+  .spark:nth-child(13){left:50%; width:6px;height:6px;animation-delay:3.6s; animation-duration:8s;background:#fff1d6;box-shadow:0 0 24px #ffd9a0}
+  .spark:nth-child(14){left:54%; width:1px;height:1px;animation-delay:5.1s; animation-duration:6s}
+  .spark:nth-child(15){left:58%; width:3px;height:3px;animation-delay:1.5s; animation-duration:9s;background:var(--ember-deep)}
+  .spark:nth-child(16){left:62%; width:2px;height:2px;animation-delay:4.3s; animation-duration:5s}
+  .spark:nth-child(17){left:66%; width:4px;height:4px;animation-delay:7s;   animation-duration:7s;background:var(--ember-soft);box-shadow:0 0 14px var(--ember-soft)}
+  .spark:nth-child(18){left:70%; width:1px;height:1px;animation-delay:6.6s; animation-duration:6s}
+  .spark:nth-child(19){left:73%; width:3px;height:3px;animation-delay:2.4s; animation-duration:8s}
+  .spark:nth-child(20){left:77%; width:5px;height:5px;animation-delay:4.9s; animation-duration:6s;background:#fff1d6;box-shadow:0 0 22px #ffb86a}
+  .spark:nth-child(21){left:80%; width:2px;height:2px;animation-delay:1s;   animation-duration:7s;background:var(--ember-deep);box-shadow:0 0 6px var(--ember-deep)}
+  .spark:nth-child(22){left:84%; width:1px;height:1px;animation-delay:3.4s; animation-duration:5s}
+  .spark:nth-child(23){left:87%; width:3px;height:3px;animation-delay:5.8s; animation-duration:9s}
+  .spark:nth-child(24){left:91%; width:2px;height:2px;animation-delay:.3s;  animation-duration:6s;background:var(--ember-soft);box-shadow:0 0 10px var(--ember-soft)}
+  .spark:nth-child(25){left:94%; width:4px;height:4px;animation-delay:3.9s; animation-duration:7s;box-shadow:0 0 16px var(--ember-soft)}
+  .spark:nth-child(26){left:97%; width:1px;height:1px;animation-delay:6s;   animation-duration:5s}
+  .spark:nth-child(27){left:40%; width:2px;height:2px;animation-delay:7.4s; animation-duration:8s}
+  .spark:nth-child(28){left:65%; width:3px;height:3px;animation-delay:.2s;  animation-duration:7s;background:var(--ember-deep)}
+  .spark:nth-child(29){left:20%; width:5px;height:5px;animation-delay:5s;   animation-duration:6s;background:#fff1d6;box-shadow:0 0 22px #ffd9a0}
+  .spark:nth-child(30){left:55%; width:2px;height:2px;animation-delay:2s;   animation-duration:9s;background:var(--ember-soft)}
+
+  /* Light theme — override colors to deeper reds for contrast against the cream background */
+  :root[data-theme="light"] .spark{
+    mix-blend-mode:multiply;
+    background:#8a2f0a;box-shadow:0 0 8px rgba(138,47,10,.55);
+    animation-name:ember-rise-light
+  }
+  /* mid-size sparks get a warmer mid-tone */
+  :root[data-theme="light"] .spark:nth-child(3),
+  :root[data-theme="light"] .spark:nth-child(11),
+  :root[data-theme="light"] .spark:nth-child(17),
+  :root[data-theme="light"] .spark:nth-child(25){background:#c44a17;box-shadow:0 0 14px rgba(196,74,23,.65)}
+  /* big sparks get the brightest reddish-orange */
+  :root[data-theme="light"] .spark:nth-child(6),
+  :root[data-theme="light"] .spark:nth-child(13),
+  :root[data-theme="light"] .spark:nth-child(20),
+  :root[data-theme="light"] .spark:nth-child(29){background:#dd5a1c;box-shadow:0 0 22px rgba(221,90,28,.75)}
+
+  @keyframes ember-rise{
+    0%{transform:translate(0,0) scale(0);opacity:0}
+    8%{opacity:1;transform:translate(0,-8vh) scale(1.2)}
+    35%{transform:translate(25px,-40vh) scale(1);opacity:.9}
+    70%{transform:translate(-15px,-75vh) scale(.7);opacity:.6}
+    100%{transform:translate(20px,-115vh) scale(0);opacity:0}
+  }
+  @keyframes ember-rise-light{
+    0%{transform:translate(0,0) scale(0);opacity:0}
+    8%{opacity:.95;transform:translate(0,-8vh) scale(1.2)}
+    35%{transform:translate(25px,-40vh) scale(1);opacity:.85}
+    70%{transform:translate(-15px,-75vh) scale(.7);opacity:.55}
+    100%{transform:translate(20px,-115vh) scale(0);opacity:0}
+  }
+
+  /* Logo dot — quicker, bigger pulse */
+  .brand .dot{animation:dot-pulse 1.6s ease-in-out infinite}
+  @keyframes dot-pulse{
+    0%,100%{box-shadow:0 0 14px var(--ember),0 0 0 0 rgba(255,122,47,.5);transform:scale(1)}
+    50%{box-shadow:0 0 28px var(--ember),0 0 48px var(--ember-soft),0 0 0 6px rgba(255,122,47,0);transform:scale(1.15)}
+  }
+
+  /* Hero — candle-like irregular flicker on the whole total */
+  .hero .total{animation:flame-flicker 4s ease-in-out infinite}
+  @keyframes flame-flicker{
+    0%,100%{filter:brightness(1)}
+    12%{filter:brightness(1.12)}
+    24%{filter:brightness(.94)}
+    38%{filter:brightness(1.18)}
+    52%{filter:brightness(.97)}
+    68%{filter:brightness(1.08)}
+    82%{filter:brightness(.92)}
+  }
+  /* Hero currency symbol — breathing glow on top of the flicker */
+  .hero .total .cy{animation:cy-glow 2.4s ease-in-out infinite}
+  @keyframes cy-glow{
+    0%,100%{text-shadow:0 0 18px rgba(255,122,47,.35)}
+    50%{text-shadow:0 0 36px rgba(255,122,47,.75),0 0 64px rgba(255,122,47,.35)}
+  }
+
+  /* Top burner tag — stronger pulse ring */
+  .prod.top .tag{animation:tag-pulse 1.8s ease-in-out infinite}
+  @keyframes tag-pulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(255,122,47,.5)}
+    70%{box-shadow:0 0 0 9px rgba(255,122,47,0)}
+    100%{box-shadow:0 0 0 0 rgba(255,122,47,0)}
+  }
+  /* Top burner card — subtle pulsing glow around the most expensive product */
+  .prod.top{animation:top-glow 3.2s ease-in-out infinite}
+  @keyframes top-glow{
+    0%,100%{box-shadow:0 0 24px rgba(255,122,47,.10)}
+    50%{box-shadow:0 0 40px rgba(255,122,47,.25),0 0 80px rgba(255,122,47,.08)}
+  }
+
+  /* Make sure content stays above the ambient layers */
+  .wrap{position:relative;z-index:1}
+
+  /* Respect motion preferences */
+  @media (prefers-reduced-motion: reduce){
+    .bg-orb,.spark,.brand .dot,.hero .total,.hero .total .cy,.prod.top .tag,.prod.top,.hero,.prod,
+    .heat-haze::before,.heat-haze::after{animation:none !important}
+  }
+
   @media (max-width:560px){
     .wrap{padding:20px 14px 50px}
     .field{flex:1 1 100%}
     .amt-field{flex:1 1 100%}
   }
 </style>
+
+<div class="bg-orbs" aria-hidden="true">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+  <div class="bg-orb bg-orb-4"></div>
+  <div class="bg-orb bg-orb-5"></div>
+  <div class="bg-orb bg-orb-6"></div>
+</div>
+<div class="heat-haze" aria-hidden="true"></div>
+<div class="sparks" aria-hidden="true">
+  <span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span>
+  <span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span>
+  <span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span>
+  <span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span>
+  <span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span>
+  <span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span>
+</div>
 
 <div class="wrap">
   <header>
