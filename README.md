@@ -8,6 +8,14 @@ No accounts. No tracking. No build step. Just one HTML file.
 
 **Live:** [burn.solocamp.work](https://burn.solocamp.work)
 
+![Burn Tracker — dark theme](screenshots/dark.jpg)
+
+<details><summary>Light theme</summary>
+
+![Burn Tracker — light theme](screenshots/light.jpg)
+
+</details>
+
 ---
 
 ## Why
