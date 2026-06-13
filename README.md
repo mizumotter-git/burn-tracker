@@ -29,7 +29,7 @@ If you spin up a new project every week, your running costs scatter across a doz
 - **Per-product breakdown** — sorted highest-first, with a heat bar, share of total, and a **"Top burner"** tag on the most expensive product.
 - **Mixed currencies** — enter costs in USD or JPY and convert everything with a manual exchange rate. Toggle the display currency anytime.
 - **Quick links** — add a service's dashboard URL and click straight through from the breakdown.
-- **Light / dark themes** — your choice is remembered.
+- **Six themes** — 🔥 Ember (the default glow), ⚪ Simple (monochrome, zero motion), plus four statement looks: 🌋 Wildfire (the burn, out of control), 🌀 Storm (a hurricane on your budget), 💼 Boardroom (budget-meeting chatter), 🧮 Ledger (green-bar paper and a running calculator tape). Your choice is remembered.
 - **Local-first** — all data stays in your browser. Nothing is sent anywhere.
 
 ## Run locally

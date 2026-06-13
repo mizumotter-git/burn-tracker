@@ -34,27 +34,30 @@
     --danger:#e5604a;
     --mono:'IBM Plex Mono',ui-monospace,monospace;
     --sans:'IBM Plex Sans',system-ui,sans-serif;
-    --glow:rgba(255,122,47,.10);
-    --glow-strong:rgba(255,122,47,.18);
+    --glow:rgba(var(--ember-rgb),.10);
+    --glow-strong:rgba(var(--ember-rgb),.18);
     --btn-text:#190d05;
+    --ember-rgb:255,122,47;
   }
-  :root[data-theme="light"]{
-    --bg:#faf6f1;
-    --bg-soft:#f2ebe2;
+  /* Simple — monochrome, motionless, nothing but the numbers */
+  :root[data-theme="simple"]{
+    --bg:#ffffff;
+    --bg-soft:#f5f5f4;
     --card:#ffffff;
-    --card-hi:#fbf4ec;
-    --line:#e6dccf;
-    --line-soft:#efe7dc;
-    --text:#251d16;
-    --muted:#6d6055;
-    --faint:#9a8d80;
-    --ember:#dd5a1c;
-    --ember-soft:#c4531d;
-    --ember-deep:#b8430f;
-    --danger:#c4422c;
-    --glow:rgba(221,90,28,.07);
-    --glow-strong:rgba(221,90,28,.10);
-    --btn-text:#fff;
+    --card-hi:#fafaf9;
+    --line:#d9d6d2;
+    --line-soft:#eae8e4;
+    --text:#191817;
+    --muted:#5f5b56;
+    --faint:#9b958e;
+    --ember:#191817;
+    --ember-soft:#3a3733;
+    --ember-deep:#000000;
+    --danger:#c0392b;
+    --glow:rgba(0,0,0,.04);
+    --glow-strong:rgba(0,0,0,.05);
+    --btn-text:#ffffff;
+    --ember-rgb:25,24,23;
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans)}
@@ -64,19 +67,26 @@
       /* upper subtle heat haze (the original glow) */
       radial-gradient(120% 80% at 50% -10%, var(--glow), transparent 60%),
       /* bottom fire floor — the burn is anchored at the bottom */
-      radial-gradient(150% 80% at 50% 110%, rgba(255,122,47,.22), rgba(201,73,26,.10) 35%, transparent 75%),
+      radial-gradient(150% 80% at 50% 110%, rgba(var(--ember-rgb),.22), rgba(201,73,26,.10) 35%, transparent 75%),
       /* a hint of warm tint across the whole canvas */
       radial-gradient(80% 100% at 50% 100%, rgba(201,73,26,.06), transparent 60%),
       var(--bg);
     -webkit-font-smoothing:antialiased;
   }
-  :root[data-theme="light"] body{
-    background:
-      radial-gradient(120% 80% at 50% -10%, var(--glow), transparent 60%),
-      radial-gradient(150% 80% at 50% 110%, rgba(184,67,15,.26), rgba(221,90,28,.12) 35%, transparent 75%),
-      radial-gradient(80% 100% at 50% 100%, rgba(184,67,15,.10), transparent 60%),
-      var(--bg);
-  }
+  :root[data-theme="simple"] body{background:var(--bg)}
+  /* hide every ambient layer and stop every decorative animation */
+  :root[data-theme="simple"] .bg-orbs,
+  :root[data-theme="simple"] .sparks,
+  :root[data-theme="simple"] .heat-haze{display:none}
+  :root[data-theme="simple"] .brand .dot,
+  :root[data-theme="simple"] .hero .total,
+  :root[data-theme="simple"] .hero .total .cy,
+  :root[data-theme="simple"] .prod.top .tag,
+  :root[data-theme="simple"] .prod.top{animation:none}
+  :root[data-theme="simple"] .brand .dot{box-shadow:none}
+  :root[data-theme="simple"] .hero{background:var(--card)}
+  :root[data-theme="simple"] .hero::after{display:none}
+  :root[data-theme="simple"] .prod.top{background:var(--card)}
   .wrap{max-width:880px;margin:0 auto;padding:28px 20px 64px}
 
   /* header */
@@ -91,10 +101,11 @@
   .cur button.on{background:var(--card-hi);color:var(--text)}
   .fx{display:flex;align-items:center;gap:5px;background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:9px;padding:5px 9px;font-family:var(--mono);font-size:12px;color:var(--muted)}
   .fx input{width:54px;background:var(--card);border:1px solid var(--line);color:var(--text);font-family:var(--mono);font-size:12px;padding:3px 6px;border-radius:6px;text-align:right}
-  .fx input:focus{border-color:var(--ember);box-shadow:0 0 0 2px rgba(255,122,47,.12);outline:none}
-  .theme-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--bg-soft);
-    border:1px solid var(--line-soft);border-radius:9px;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:0}
-  .theme-btn:hover{color:var(--ember);border-color:var(--ember)}
+  .fx input:focus{border-color:var(--ember);box-shadow:0 0 0 2px rgba(var(--ember-rgb),.12);outline:none}
+  .theme-sel{width:auto;height:32px;background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:9px;
+    color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:12px;padding:0 8px;outline:none}
+  .theme-sel:hover{color:var(--ember);border-color:var(--ember)}
+  .theme-sel:focus{border-color:var(--ember);box-shadow:0 0 0 2px rgba(var(--ember-rgb),.12)}
 
   /* hero */
   .hero{
@@ -119,11 +130,11 @@
 
   /* breakdown */
   .prod{background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:16px 16px 14px;margin-bottom:12px;animation:rise .45s ease both}
-  .prod.top{border-color:rgba(255,122,47,.45);background:linear-gradient(180deg,var(--card-hi),var(--card))}
+  .prod.top{border-color:rgba(var(--ember-rgb),.45);background:linear-gradient(180deg,var(--card-hi),var(--card))}
   .prow{display:flex;align-items:center;justify-content:space-between;gap:12px}
   .pname{font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;min-width:0}
   .pname .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .tag{font-family:var(--mono);font-size:10px;letter-spacing:.5px;color:var(--ember);border:1px solid rgba(255,122,47,.4);border-radius:20px;padding:2px 8px;white-space:nowrap}
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:.5px;color:var(--ember);border:1px solid rgba(var(--ember-rgb),.4);border-radius:20px;padding:2px 8px;white-space:nowrap}
   .pamt{font-family:var(--mono);font-weight:600;font-size:16px;white-space:nowrap}
   .pamt small{color:var(--faint);font-weight:400;font-size:11px;margin-left:6px}
   .bar{height:6px;border-radius:6px;background:var(--line-soft);margin:11px 0 12px;overflow:hidden}
@@ -142,7 +153,7 @@
   .item .orig{font-family:var(--mono);font-size:11px;color:var(--faint)}
   .x,.e{background:none;border:0;color:var(--faint);cursor:pointer;font-size:14px;line-height:1;padding:2px 5px;border-radius:6px}
   .x:hover{color:var(--danger);background:rgba(229,96,74,.1)}
-  .e:hover{color:var(--ember);background:rgba(255,122,47,.1)}
+  .e:hover{color:var(--ember);background:rgba(var(--ember-rgb),.1)}
   .item.editing{background:var(--glow);border-radius:6px}
   .empty-svc{color:var(--faint);font-size:12px;font-style:italic;padding:6px 0}
   .pdel{margin-top:10px}
@@ -159,7 +170,7 @@
   input,select{width:100%;background:var(--card);border:1px solid var(--line);color:var(--text);
     font-family:var(--sans);font-size:14px;padding:10px 11px;border-radius:9px;outline:none}
   input::placeholder{color:var(--faint)}
-  input:focus,select:focus{border-color:var(--ember);box-shadow:0 0 0 3px rgba(255,122,47,.12)}
+  input:focus,select:focus{border-color:var(--ember);box-shadow:0 0 0 3px rgba(var(--ember-rgb),.12)}
   .amt-field{flex:0 1 130px}
   .btn{margin-top:12px;width:100%;background:var(--ember);color:var(--btn-text);border:0;font-family:var(--sans);font-weight:600;
     font-size:14px;padding:11px;border-radius:10px;cursor:pointer;transition:filter .15s,transform .05s}
@@ -169,7 +180,7 @@
   .btn-cancel{margin-top:8px;width:100%;background:none;color:var(--muted);border:1px solid var(--line-soft);
     font-family:var(--sans);font-size:13px;padding:9px;border-radius:10px;cursor:pointer}
   .btn-cancel:hover{color:var(--text);border-color:var(--line)}
-  .panel.editing{border-color:rgba(255,122,47,.45);box-shadow:0 0 0 1px rgba(255,122,47,.12)}
+  .panel.editing{border-color:rgba(var(--ember-rgb),.45);box-shadow:0 0 0 1px rgba(var(--ember-rgb),.12)}
   .hint{color:var(--faint);font-size:12px;margin-top:9px;font-family:var(--mono)}
 
   .blank{text-align:center;color:var(--faint);padding:30px 10px;font-size:14px;line-height:1.7}
@@ -193,9 +204,8 @@
   /* Floating gradient orbs in the background */
   .bg-orbs{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
   .bg-orb{position:absolute;border-radius:50%;filter:blur(70px);will-change:transform,opacity;mix-blend-mode:screen}
-  :root[data-theme="light"] .bg-orb{mix-blend-mode:multiply}
   .bg-orb-1{width:65vw;height:65vw;max-width:680px;max-height:680px;top:-14%;left:-12%;
-    background:radial-gradient(circle,rgba(255,122,47,.65),transparent 65%);
+    background:radial-gradient(circle,rgba(var(--ember-rgb),.65),transparent 65%);
     animation:drift1 14s ease-in-out infinite}
   .bg-orb-2{width:55vw;height:55vw;max-width:580px;max-height:580px;top:38%;right:-16%;
     background:radial-gradient(circle,rgba(201,73,26,.55),transparent 65%);
@@ -205,12 +215,8 @@
     animation:drift3 12s ease-in-out infinite}
   /* The "fire floor" — a wide orange glow pinned to the bottom of the viewport */
   .bg-orb-4{width:140vw;height:60vh;bottom:-30vh;left:-20vw;border-radius:50%;
-    background:radial-gradient(ellipse at center,rgba(255,122,47,.55),rgba(201,73,26,.25) 40%,transparent 70%);
+    background:radial-gradient(ellipse at center,rgba(var(--ember-rgb),.55),rgba(201,73,26,.25) 40%,transparent 70%);
     animation:floor-wave 9s ease-in-out infinite;filter:blur(50px)}
-  :root[data-theme="light"] .bg-orb-1{background:radial-gradient(circle,rgba(184,67,15,.50),transparent 65%)}
-  :root[data-theme="light"] .bg-orb-2{background:radial-gradient(circle,rgba(221,90,28,.45),transparent 65%)}
-  :root[data-theme="light"] .bg-orb-3{background:radial-gradient(circle,rgba(255,122,47,.38),transparent 65%)}
-  :root[data-theme="light"] .bg-orb-4{background:radial-gradient(ellipse at center,rgba(184,67,15,.50),rgba(221,90,28,.22) 40%,transparent 70%)}
   @keyframes drift1{
     0%,100%{transform:translate(0,0) scale(1);opacity:.85}
     25%{transform:translate(140px,80px) scale(1.15);opacity:1}
@@ -234,13 +240,11 @@
 
   /* Two tall flame pillars rising from the bottom edge */
   .bg-orb-5{width:28vw;height:85vh;max-width:340px;bottom:-22vh;left:14%;border-radius:50%;
-    background:radial-gradient(ellipse at center,rgba(255,122,47,.55),rgba(201,73,26,.20) 40%,transparent 70%);
+    background:radial-gradient(ellipse at center,rgba(var(--ember-rgb),.55),rgba(201,73,26,.20) 40%,transparent 70%);
     animation:flame-pillar-1 6.5s ease-in-out infinite;filter:blur(55px)}
   .bg-orb-6{width:24vw;height:78vh;max-width:300px;bottom:-26vh;right:18%;border-radius:50%;
-    background:radial-gradient(ellipse at center,rgba(255,154,92,.48),rgba(255,122,47,.18) 40%,transparent 70%);
+    background:radial-gradient(ellipse at center,rgba(255,154,92,.48),rgba(var(--ember-rgb),.18) 40%,transparent 70%);
     animation:flame-pillar-2 8.2s ease-in-out infinite;filter:blur(55px)}
-  :root[data-theme="light"] .bg-orb-5{background:radial-gradient(ellipse at center,rgba(184,67,15,.50),rgba(221,90,28,.22) 40%,transparent 70%)}
-  :root[data-theme="light"] .bg-orb-6{background:radial-gradient(ellipse at center,rgba(221,90,28,.44),rgba(184,67,15,.18) 40%,transparent 70%)}
   @keyframes flame-pillar-1{
     0%,100%{transform:translateY(0) scaleY(1) scaleX(1);opacity:.9}
     25%{transform:translateY(-30px) scaleY(1.14) scaleX(.92);opacity:1}
@@ -258,20 +262,12 @@
   .heat-haze::before,.heat-haze::after{content:"";position:absolute;left:-10%;right:-10%;filter:blur(40px);mix-blend-mode:screen}
   .heat-haze::before{bottom:-8%;height:55%;
     background:
-      radial-gradient(ellipse 55% 50% at 25% 100%,rgba(255,122,47,.36),transparent 70%),
+      radial-gradient(ellipse 55% 50% at 25% 100%,rgba(var(--ember-rgb),.36),transparent 70%),
       radial-gradient(ellipse 50% 45% at 75% 100%,rgba(201,73,26,.30),transparent 70%);
     animation:haze1 7s ease-in-out infinite}
   .heat-haze::after{bottom:0;height:35%;
     background:radial-gradient(ellipse 55% 55% at 50% 100%,rgba(255,154,92,.32),transparent 70%);
     animation:haze2 5.5s ease-in-out infinite alternate}
-  :root[data-theme="light"] .heat-haze::before,
-  :root[data-theme="light"] .heat-haze::after{mix-blend-mode:multiply}
-  :root[data-theme="light"] .heat-haze::before{
-    background:
-      radial-gradient(ellipse 55% 50% at 25% 100%,rgba(184,67,15,.32),transparent 70%),
-      radial-gradient(ellipse 50% 45% at 75% 100%,rgba(221,90,28,.28),transparent 70%)}
-  :root[data-theme="light"] .heat-haze::after{
-    background:radial-gradient(ellipse 55% 55% at 50% 100%,rgba(255,122,47,.30),transparent 70%)}
   @keyframes haze1{
     0%,100%{transform:translate(0,0) scaleY(1)}
     50%{transform:translate(25px,-18px) scaleY(1.12)}
@@ -318,22 +314,6 @@
   .spark:nth-child(29){left:20%; width:5px;height:5px;animation-delay:5s;   animation-duration:6s;background:#fff1d6;box-shadow:0 0 22px #ffd9a0}
   .spark:nth-child(30){left:55%; width:2px;height:2px;animation-delay:2s;   animation-duration:9s;background:var(--ember-soft)}
 
-  /* Light theme — override colors to deeper reds for contrast against the cream background */
-  :root[data-theme="light"] .spark{
-    mix-blend-mode:multiply;
-    background:#8a2f0a;box-shadow:0 0 8px rgba(138,47,10,.55);
-    animation-name:ember-rise-light
-  }
-  /* mid-size sparks get a warmer mid-tone */
-  :root[data-theme="light"] .spark:nth-child(3),
-  :root[data-theme="light"] .spark:nth-child(11),
-  :root[data-theme="light"] .spark:nth-child(17),
-  :root[data-theme="light"] .spark:nth-child(25){background:#c44a17;box-shadow:0 0 14px rgba(196,74,23,.65)}
-  /* big sparks get the brightest reddish-orange */
-  :root[data-theme="light"] .spark:nth-child(6),
-  :root[data-theme="light"] .spark:nth-child(13),
-  :root[data-theme="light"] .spark:nth-child(20),
-  :root[data-theme="light"] .spark:nth-child(29){background:#dd5a1c;box-shadow:0 0 22px rgba(221,90,28,.75)}
 
   @keyframes ember-rise{
     0%{transform:translate(0,0) scale(0);opacity:0}
@@ -342,19 +322,12 @@
     70%{transform:translate(-15px,-75vh) scale(.7);opacity:.6}
     100%{transform:translate(20px,-115vh) scale(0);opacity:0}
   }
-  @keyframes ember-rise-light{
-    0%{transform:translate(0,0) scale(0);opacity:0}
-    8%{opacity:.95;transform:translate(0,-8vh) scale(1.2)}
-    35%{transform:translate(25px,-40vh) scale(1);opacity:.85}
-    70%{transform:translate(-15px,-75vh) scale(.7);opacity:.55}
-    100%{transform:translate(20px,-115vh) scale(0);opacity:0}
-  }
 
   /* Logo dot — quicker, bigger pulse */
   .brand .dot{animation:dot-pulse 1.6s ease-in-out infinite}
   @keyframes dot-pulse{
-    0%,100%{box-shadow:0 0 14px var(--ember),0 0 0 0 rgba(255,122,47,.5);transform:scale(1)}
-    50%{box-shadow:0 0 28px var(--ember),0 0 48px var(--ember-soft),0 0 0 6px rgba(255,122,47,0);transform:scale(1.15)}
+    0%,100%{box-shadow:0 0 14px var(--ember),0 0 0 0 rgba(var(--ember-rgb),.5);transform:scale(1)}
+    50%{box-shadow:0 0 28px var(--ember),0 0 48px var(--ember-soft),0 0 0 6px rgba(var(--ember-rgb),0);transform:scale(1.15)}
   }
 
   /* Hero — candle-like irregular flicker on the whole total */
@@ -371,31 +344,184 @@
   /* Hero currency symbol — breathing glow on top of the flicker */
   .hero .total .cy{animation:cy-glow 2.4s ease-in-out infinite}
   @keyframes cy-glow{
-    0%,100%{text-shadow:0 0 18px rgba(255,122,47,.35)}
-    50%{text-shadow:0 0 36px rgba(255,122,47,.75),0 0 64px rgba(255,122,47,.35)}
+    0%,100%{text-shadow:0 0 18px rgba(var(--ember-rgb),.35)}
+    50%{text-shadow:0 0 36px rgba(var(--ember-rgb),.75),0 0 64px rgba(var(--ember-rgb),.35)}
   }
 
   /* Top burner tag — stronger pulse ring */
   .prod.top .tag{animation:tag-pulse 1.8s ease-in-out infinite}
   @keyframes tag-pulse{
-    0%,100%{box-shadow:0 0 0 0 rgba(255,122,47,.5)}
-    70%{box-shadow:0 0 0 9px rgba(255,122,47,0)}
-    100%{box-shadow:0 0 0 0 rgba(255,122,47,0)}
+    0%,100%{box-shadow:0 0 0 0 rgba(var(--ember-rgb),.5)}
+    70%{box-shadow:0 0 0 9px rgba(var(--ember-rgb),0)}
+    100%{box-shadow:0 0 0 0 rgba(var(--ember-rgb),0)}
   }
   /* Top burner card — subtle pulsing glow around the most expensive product */
   .prod.top{animation:top-glow 3.2s ease-in-out infinite}
   @keyframes top-glow{
-    0%,100%{box-shadow:0 0 24px rgba(255,122,47,.10)}
-    50%{box-shadow:0 0 40px rgba(255,122,47,.25),0 0 80px rgba(255,122,47,.08)}
+    0%,100%{box-shadow:0 0 24px rgba(var(--ember-rgb),.10)}
+    50%{box-shadow:0 0 40px rgba(var(--ember-rgb),.25),0 0 80px rgba(var(--ember-rgb),.08)}
   }
 
   /* Make sure content stays above the ambient layers */
   .wrap{position:relative;z-index:1}
 
+  /* ===== Statement themes ===== */
+  /* Wildfire — the burn, fully out of control */
+  :root[data-theme="wildfire"]{
+    --bg:#140300; --bg-soft:#1f0a04; --card:#260f06; --card-hi:#36150a;
+    --line:#5a2410; --line-soft:#401a0b;
+    --text:#ffe9d2; --muted:#dda687; --faint:#a06a4e;
+    --ember:#ff4d00; --ember-soft:#ff8a3d; --ember-deep:#cc2e00; --ember-rgb:255,77,0;
+    --danger:#ff5a3c; --glow:rgba(255,77,0,.18); --glow-strong:rgba(255,77,0,.30); --btn-text:#1c0a02;
+  }
+  :root[data-theme="wildfire"] body{
+    background:
+      radial-gradient(120% 70% at 50% -20%, rgba(204,46,0,.30), transparent 60%),
+      radial-gradient(150% 80% at 50% 112%, rgba(255,77,0,.42), rgba(204,46,0,.18) 40%, transparent 75%),
+      var(--bg);
+  }
+  /* crank every fire layer up */
+  :root[data-theme="wildfire"] .bg-orb-1{background:radial-gradient(circle,rgba(255,77,0,.75),transparent 65%);animation-duration:7s}
+  :root[data-theme="wildfire"] .bg-orb-2{background:radial-gradient(circle,rgba(204,46,0,.65),transparent 65%);animation-duration:9s}
+  :root[data-theme="wildfire"] .bg-orb-3{background:radial-gradient(circle,rgba(255,138,61,.6),transparent 65%);animation-duration:6s}
+  :root[data-theme="wildfire"] .bg-orb-4{background:radial-gradient(ellipse at center,rgba(255,77,0,.7),rgba(204,46,0,.32) 40%,transparent 70%);animation-duration:4.5s}
+  :root[data-theme="wildfire"] .bg-orb-5{background:radial-gradient(ellipse at center,rgba(255,77,0,.68),rgba(204,46,0,.26) 40%,transparent 70%);animation-duration:3.4s}
+  :root[data-theme="wildfire"] .bg-orb-6{background:radial-gradient(ellipse at center,rgba(255,138,61,.6),rgba(255,77,0,.22) 40%,transparent 70%);animation-duration:4.1s}
+  :root[data-theme="wildfire"] .heat-haze::before{animation-duration:3.5s}
+  :root[data-theme="wildfire"] .heat-haze::after{animation-duration:2.6s}
+  :root[data-theme="wildfire"] .spark{box-shadow:0 0 16px var(--ember-soft)}
+  /* throbbing firelight over everything */
+  .fire-flicker{display:none;position:fixed;inset:0;pointer-events:none;z-index:2;mix-blend-mode:screen;opacity:.5;
+    background:radial-gradient(120% 100% at 50% 100%, rgba(255,90,0,.18), transparent 65%);
+    animation:wild-flicker 2.2s ease-in-out infinite}
+  :root[data-theme="wildfire"] .fire-flicker{display:block}
+  @keyframes wild-flicker{
+    0%,100%{opacity:.55}12%{opacity:.95}23%{opacity:.4}38%{opacity:1}54%{opacity:.5}67%{opacity:.9}81%{opacity:.35}
+  }
+  /* wind-driven ember streaks (elements added by JS; CSS animates) */
+  .firewind{display:none;position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  :root[data-theme="wildfire"] .firewind{display:block}
+  .firewind i{position:absolute;bottom:-30vh;width:2px;border-radius:2px;opacity:0;
+    background:linear-gradient(180deg,transparent,var(--ember-soft) 55%,#ffd9a0);
+    box-shadow:0 0 8px var(--ember);mix-blend-mode:screen;
+    transform:rotate(22deg) translateY(0);
+    animation-name:windrise;animation-timing-function:linear;animation-iteration-count:infinite}
+  @keyframes windrise{
+    0%{transform:rotate(22deg) translateY(0);opacity:0}
+    7%{opacity:.95}
+    100%{transform:rotate(22deg) translateY(-175vh);opacity:0}
+  }
+
+  /* Storm — a hurricane raining on your budget */
+  :root[data-theme="storm"]{
+    --bg:#0a0f16; --bg-soft:#0f1722; --card:#131e2c; --card-hi:#192737;
+    --line:#2b3d55; --line-soft:#1f2e43;
+    --text:#e6eef8; --muted:#94a8bf; --faint:#5e7289;
+    --ember:#4da3ff; --ember-soft:#7cc2ff; --ember-deep:#1f6fd0; --ember-rgb:77,163,255;
+    --danger:#ff6b5e; --glow:rgba(77,163,255,.10); --glow-strong:rgba(77,163,255,.20); --btn-text:#04101f;
+  }
+  :root[data-theme="storm"] body{
+    background:
+      radial-gradient(120% 80% at 50% -10%, rgba(40,60,90,.45), transparent 60%),
+      linear-gradient(180deg,#0c1422,var(--bg) 70%);
+  }
+  /* fire layers off; the first three orbs become storm clouds */
+  :root[data-theme="storm"] .sparks,:root[data-theme="storm"] .heat-haze,
+  :root[data-theme="storm"] .bg-orb-4,:root[data-theme="storm"] .bg-orb-5,:root[data-theme="storm"] .bg-orb-6{display:none}
+  :root[data-theme="storm"] .bg-orb-1{background:radial-gradient(circle,rgba(64,86,118,.6),transparent 65%);animation-duration:9s}
+  :root[data-theme="storm"] .bg-orb-2{background:radial-gradient(circle,rgba(46,66,96,.55),transparent 65%);top:8%;animation-duration:11s}
+  :root[data-theme="storm"] .bg-orb-3{background:radial-gradient(circle,rgba(88,112,148,.45),transparent 65%);animation-duration:8s}
+  /* driving rain (elements added by JS; CSS animates) */
+  .rain{display:none;position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  :root[data-theme="storm"] .rain{display:block}
+  .rain i{position:absolute;top:0;width:2px;
+    background:linear-gradient(180deg,transparent,rgba(160,205,255,.55));
+    transform:rotate(11deg) translateY(-35vh);
+    animation-name:rain-fall;animation-timing-function:linear;animation-iteration-count:infinite}
+  @keyframes rain-fall{
+    from{transform:rotate(11deg) translateY(-35vh)}
+    to{transform:rotate(11deg) translateY(135vh)}
+  }
+  /* lightning over the whole page */
+  .lightning{display:none;position:fixed;inset:0;pointer-events:none;z-index:2;opacity:0;mix-blend-mode:screen;
+    background:radial-gradient(80% 60% at 62% 0%, rgba(195,224,255,.95), rgba(120,170,255,.35) 50%, transparent 80%);
+    animation:lightning-flash 13s linear infinite}
+  :root[data-theme="storm"] .lightning{display:block}
+  @keyframes lightning-flash{
+    0%,31.6%{opacity:0}
+    32%{opacity:.4}32.6%{opacity:.06}33.2%{opacity:.3}34.4%{opacity:0}
+    71.4%{opacity:0}71.8%{opacity:.32}72.8%{opacity:0}
+    100%{opacity:0}
+  }
+
+  /* Boardroom — the budget meeting, in session */
+  :root[data-theme="boardroom"]{
+    --bg:#f1f3f6; --bg-soft:#e8ecf1; --card:#ffffff; --card-hi:#f8fafc;
+    --line:#d3dbe4; --line-soft:#e1e7ee;
+    --text:#1c2530; --muted:#5b6877; --faint:#8b97a5;
+    --ember:#d8403a; --ember-soft:#e2625c; --ember-deep:#b32f2a; --ember-rgb:216,64,58;
+    --danger:#b32f2a; --glow:rgba(216,64,58,.06); --glow-strong:rgba(216,64,58,.10); --btn-text:#fff;
+  }
+  /* spreadsheet-grid backdrop */
+  :root[data-theme="boardroom"] body{
+    background:
+      linear-gradient(var(--line-soft) 1px, transparent 1px) 0 0/100% 28px,
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px) 0 0/28px 100%,
+      var(--bg);
+  }
+  :root[data-theme="boardroom"] .bg-orbs,:root[data-theme="boardroom"] .sparks,:root[data-theme="boardroom"] .heat-haze{display:none}
+  /* meeting chatter drifting across the room */
+  .words{display:none;position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  :root[data-theme="boardroom"] .words{display:block}
+  .words span{position:absolute;left:0;top:var(--t);font-family:var(--mono);font-size:var(--s);font-weight:500;
+    color:var(--muted);opacity:var(--o,.5);white-space:nowrap;
+    transform:translateX(110vw) rotate(var(--r,0deg));
+    animation:word-drift var(--d) linear infinite;animation-delay:var(--de)}
+  .words .no{color:#b32f2a;font-weight:600}
+  .words .yes{color:#1e8e4e;font-weight:600}
+  .words .ghost{font-family:var(--sans);font-weight:700;letter-spacing:6px;text-transform:uppercase}
+  @keyframes word-drift{
+    from{transform:translateX(110vw) rotate(var(--r,0deg))}
+    to{transform:translateX(-130%) rotate(var(--r,0deg))}
+  }
+
+  /* Ledger — the accountant's desk: green-bar paper, an LCD glow, a running calculator tape */
+  :root[data-theme="ledger"]{
+    --bg:#08100a; --bg-soft:#0d1811; --card:#101c14; --card-hi:#152419;
+    --line:#23402b; --line-soft:#18301f;
+    --text:#dcf5e4; --muted:#8fc4a0; --faint:#578a68;
+    --ember:#2ee06f; --ember-soft:#6cf0a0; --ember-deep:#159a4a; --ember-rgb:46,224,111;
+    --danger:#ff6b5e; --glow:rgba(46,224,111,.10); --glow-strong:rgba(46,224,111,.18); --btn-text:#04150a;
+  }
+  /* classic green-bar continuous-form paper, dimmed */
+  :root[data-theme="ledger"] body{
+    background:
+      repeating-linear-gradient(180deg, rgba(46,224,111,.04) 0 26px, transparent 26px 52px),
+      radial-gradient(120% 80% at 50% -10%, rgba(46,224,111,.07), transparent 60%),
+      var(--bg);
+  }
+  :root[data-theme="ledger"] .bg-orbs,:root[data-theme="ledger"] .sparks,:root[data-theme="ledger"] .heat-haze{display:none}
+  /* LCD glow on the headline number */
+  :root[data-theme="ledger"] .hero .total{text-shadow:0 0 16px rgba(46,224,111,.30)}
+  /* the running tape (elements are static HTML; CSS animates them upward like a receipt) */
+  .tape{display:none;position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  :root[data-theme="ledger"] .tape{display:block}
+  .tape span{position:absolute;left:var(--l);bottom:-8vh;font-family:var(--mono);font-size:var(--s,13px);
+    color:var(--ember);opacity:0;white-space:nowrap;
+    animation:tape-rise var(--d) linear infinite;animation-delay:var(--de)}
+  .tape .neg{color:#ff6b5e}
+  @keyframes tape-rise{
+    0%{transform:translateY(0);opacity:0}
+    8%{opacity:var(--o,.4)}
+    85%{opacity:var(--o,.4)}
+    100%{transform:translateY(-120vh);opacity:0}
+  }
+
   /* Respect motion preferences */
   @media (prefers-reduced-motion: reduce){
     .bg-orb,.spark,.brand .dot,.hero .total,.hero .total .cy,.prod.top .tag,.prod.top,.hero,.prod,
-    .heat-haze::before,.heat-haze::after{animation:none !important}
+    .heat-haze::before,.heat-haze::after,
+    .fire-flicker,.firewind i,.rain i,.lightning,.words span,.tape span{animation:none !important}
   }
 
   @media (max-width:560px){
@@ -414,6 +540,46 @@
   <div class="bg-orb bg-orb-6"></div>
 </div>
 <div class="heat-haze" aria-hidden="true"></div>
+<div class="fire-flicker" aria-hidden="true"></div>
+<div class="firewind" aria-hidden="true"></div>
+<div class="rain" aria-hidden="true"></div>
+<div class="lightning" aria-hidden="true"></div>
+<div class="words" aria-hidden="true">
+  <span style="--t:6%;--d:34s;--de:-3s;--s:15px">We should cut costs.</span>
+  <span style="--t:11%;--d:46s;--de:-21s;--s:18px;--r:-2deg">This is a necessary expense.</span>
+  <span style="--t:16%;--d:29s;--de:-9s;--s:14px">Who approved this?</span>
+  <span class="no" style="--t:21%;--d:38s;--de:-30s;--s:20px;--o:.7;--r:2deg">DENIED ✕</span>
+  <span style="--t:26%;--d:52s;--de:-14s;--s:15px">Let's circle back.</span>
+  <span style="--t:31%;--d:31s;--de:-25s;--s:17px">The burn rate is too high!</span>
+  <span class="ghost" style="--t:36%;--d:88s;--de:-40s;--s:64px;--o:.07">burn rate</span>
+  <span style="--t:43%;--d:27s;--de:-6s;--s:14px">It's only $5 a month…</span>
+  <span class="yes" style="--t:48%;--d:41s;--de:-18s;--s:20px;--o:.7;--r:-2deg">APPROVED ✓</span>
+  <span style="--t:53%;--d:36s;--de:-29s;--s:16px">Do we really need this?</span>
+  <span style="--t:58%;--d:48s;--de:-11s;--s:14px">Per my last email…</span>
+  <span style="--t:63%;--d:30s;--de:-22s;--s:18px">Cancel it.</span>
+  <span style="--t:68%;--d:42s;--de:-35s;--s:15px">Can we get this for free?</span>
+  <span style="--t:73%;--d:26s;--de:-8s;--s:17px">ROI?</span>
+  <span class="no" style="--t:78%;--d:39s;--de:-27s;--s:16px;--o:.65">OVER BUDGET</span>
+  <span style="--t:83%;--d:33s;--de:-16s;--s:14px">Take it offline.</span>
+  <span style="--t:88%;--d:44s;--de:-37s;--s:16px;--r:1deg">Ship it anyway.</span>
+  <span style="--t:93%;--d:37s;--de:-5s;--s:14px">What does this even do?</span>
+</div>
+<div class="tape" aria-hidden="true">
+  <span style="--l:6%;--d:18s;--de:-2s">40.00 +</span>
+  <span style="--l:13%;--d:23s;--de:-12s;--s:12px">25.00 +</span>
+  <span style="--l:22%;--d:20s;--de:-7s">20.00 +</span>
+  <span style="--l:30%;--d:26s;--de:-17s;--s:12px">15.00 +</span>
+  <span style="--l:38%;--d:19s;--de:-4s">5.00 +</span>
+  <span style="--l:46%;--d:24s;--de:-16s;--s:12px">1.00 +</span>
+  <span style="--l:54%;--d:21s;--de:-9s">0.00 +</span>
+  <span style="--l:62%;--d:25s;--de:-20s;--s:14px;--o:.55">──────────</span>
+  <span style="--l:70%;--d:22s;--de:-5s;--s:15px;--o:.6">= 106.00 /mo</span>
+  <span style="--l:78%;--d:27s;--de:-14s;--s:12px">× 12</span>
+  <span style="--l:85%;--d:20s;--de:-10s;--s:14px;--o:.55">= 1,272.00 /yr</span>
+  <span class="neg" style="--l:91%;--d:24s;--de:-19s;--s:13px;--o:.6">ERR: OVER BUDGET</span>
+  <span style="--l:16%;--d:28s;--de:-23s;--s:12px">BAL ✓</span>
+  <span class="neg" style="--l:58%;--d:26s;--de:-13s;--s:12px">− 12.00 unsubscribe</span>
+</div>
 <div class="sparks" aria-hidden="true">
   <span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span>
   <span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span><span class="spark"></span>
@@ -433,7 +599,14 @@
       </div>
     </div>
     <div class="hgroup">
-      <button class="theme-btn" id="theme" title="Toggle theme" aria-label="Toggle theme"></button>
+      <select class="theme-sel" id="theme" title="Theme" aria-label="Theme">
+        <option value="ledger">🧮 Ledger</option>
+        <option value="boardroom">💼 Boardroom</option>
+        <option value="ember">🔥 Ember</option>
+        <option value="wildfire">🌋 Wildfire</option>
+        <option value="storm">🌀 Storm</option>
+        <option value="simple">⚪ Simple</option>
+      </select>
       <div class="fx"><span>1$ =</span><input id="rate" type="number" min="0" step="any" inputmode="decimal"><span>&yen;</span></div>
       <div class="cur" id="cur"></div>
     </div>
@@ -561,11 +734,20 @@
     return "Other";
   }
 
+  var THEMES = ["ember","simple","wildfire","storm","boardroom","ledger"];
+  // Legacy stored values from the dark/light era map onto their successors
+  function normalizeTheme(t){
+    if(t === "dark") return "ember";
+    if(t === "light") return "simple";
+    return t;
+  }
+
   /* ---------- State ---------- */
   var state = load() || { version:1, currency:"JPY", rate:150, products:[], costs:[] };
   if(!state.currency) state.currency = "JPY";
   if(state.rate == null) state.rate = 150;
-  if(!state.theme) state.theme = "dark";
+  state.theme = normalizeTheme(state.theme);
+  if(!state.theme || THEMES.indexOf(state.theme) === -1) state.theme = "ember";
   // Migrate legacy costs: fill in missing currency and category
   state.costs.forEach(function(c){
     if(!c.currency) c.currency = state.currency;
@@ -574,8 +756,8 @@
 
   function applyTheme(){
     document.documentElement.setAttribute("data-theme", state.theme);
-    var b = document.getElementById("theme");
-    if(b) b.textContent = state.theme === "light" ? "\u{1F319}" : "\u2600\uFE0F";
+    var s = document.getElementById("theme");
+    if(s) s.value = state.theme;
   }
   applyTheme();
 
@@ -858,8 +1040,8 @@
   document.addEventListener("keydown", function(e){
     if(e.key === "Escape" && editingCostId){ resetCostForm(); render(); }
   });
-  $("theme").onclick=function(){
-    state.theme = (state.theme === "light") ? "dark" : "light";
+  $("theme").onchange=function(){
+    state.theme = this.value;
     save(state); applyTheme();
   };
   $("rate").addEventListener("input",function(){
@@ -909,7 +1091,7 @@
           version: 1,
           currency: (data.currency === "USD" || data.currency === "JPY") ? data.currency : "JPY",
           rate: (data.rate != null && !isNaN(Number(data.rate))) ? Number(data.rate) : 150,
-          theme: (data.theme === "light" || data.theme === "dark") ? data.theme : state.theme,
+          theme: (THEMES.indexOf(normalizeTheme(data.theme)) !== -1) ? normalizeTheme(data.theme) : state.theme,
           products: clean.products,
           costs: clean.costs
         };
@@ -920,6 +1102,28 @@
     reader.readAsText(file);
     this.value = ""; // allow re-importing the same file later
   };
+
+  // Storm rain & wildfire wind streaks: positions are deterministic, CSS does the motion
+  (function(){
+    var rain = document.querySelector(".rain"), wind = document.querySelector(".firewind"), i, el;
+    for(i=0;i<34;i++){
+      el = document.createElement("i");
+      el.style.left = (i*3 + (i%3)) + "%";
+      el.style.height = (15 + (i*11)%14) + "vh";
+      el.style.opacity = (0.22 + ((i*5)%10)/30).toFixed(2);
+      el.style.animationDuration = (0.5 + ((i*7)%10)/18).toFixed(2) + "s";
+      el.style.animationDelay = "-" + ((i*0.41)%1).toFixed(2) + "s";
+      rain.appendChild(el);
+    }
+    for(i=0;i<12;i++){
+      el = document.createElement("i");
+      el.style.left = ((i*8.3)%100).toFixed(1) + "%";
+      el.style.height = (12 + (i*7)%12) + "vh";
+      el.style.animationDuration = (1.4 + (i%5)*0.22).toFixed(2) + "s";
+      el.style.animationDelay = "-" + ((i*0.61)%2).toFixed(2) + "s";
+      wind.appendChild(el);
+    }
+  })();
 
   render();
 })();
